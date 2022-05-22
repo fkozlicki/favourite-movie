@@ -33,10 +33,13 @@ function App() {
 		try {
 			setError(false);
 			setLoading(true);
-			const data: FilmType[] = await fetchMovies();
+
+			const data = await fetchMovies();
+
 			setMovies(data);
 			setLoading(false);
 		} catch (error) {
+			setLoading(false);
 			setError(true);
 		}
 	};

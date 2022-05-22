@@ -1,10 +1,11 @@
 import { FilmType } from "../App";
 
-const url = "http://localhost:5000/movies";
+const url: string = import.meta.env.VITE_MOVIES_ENDPOINT;
 
 export const fetchMovies = async () => {
 	const res = await fetch(url);
-	return res.json();
+	const data = await res.json();
+	return data;
 };
 
 export const postMovie = async (movie: FilmType) => {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Form, MovieCard } from "./components";
 import { fetchMovies } from "./api";
+import { AiOutlineReload } from "react-icons/ai";
 import "./styles/main.css";
 
 export type FilmType = {
@@ -73,8 +74,21 @@ function App() {
 						/>
 					))}
 
-				{loading && <div>Loading...</div>}
-				{error && <div>Failed to fetch data</div>}
+				{loading && (
+					<div className="app__loading">
+						<div></div>
+						<div></div>
+					</div>
+				)}
+				{error && (
+					<div className="app__error">
+						<p>Failed to fetch data.</p>
+						<p>Try to reload the page.</p>
+						<button onClick={() => window.location.reload()}>
+							<AiOutlineReload />
+						</button>
+					</div>
+				)}
 			</div>
 		</div>
 	);

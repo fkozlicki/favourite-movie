@@ -62,10 +62,14 @@ const MovieCard: React.FC<Props> = ({
 					</p>
 				</div>
 				<div className="movie-card__buttons">
-					<button onClick={() => handleRemoveMovie(movieData._id as string)}>
+					<button
+						aria-label="delete movie"
+						onClick={() => handleRemoveMovie(movieData._id as string)}
+					>
 						<AiOutlineDelete />
 					</button>
 					<button
+						aria-label="edit this movie"
 						onClick={() => {
 							setCurrentId(movieData._id as string);
 							setFormData(movieData);

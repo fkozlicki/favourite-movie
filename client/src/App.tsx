@@ -84,7 +84,10 @@ function App() {
 					<div className="app__error">
 						<p>Failed to fetch data.</p>
 						<p>Try to reload the page.</p>
-						<button onClick={() => window.location.reload()}>
+						<button
+							aria-label="reload page"
+							onClick={() => window.location.reload()}
+						>
 							<AiOutlineReload />
 						</button>
 					</div>

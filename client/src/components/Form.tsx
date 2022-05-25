@@ -156,6 +156,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="clear-rating"
+						aria-label="clear your rate"
 						ref={disabledInput}
 						defaultChecked
 						disabled
@@ -167,6 +168,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="rating-1"
+						aria-label="rate 1 out of 5"
 						value={1}
 						onClick={(e) =>
 							setFormData({
@@ -182,6 +184,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="rating-2"
+						aria-label="rate 2 out of 5"
 						value={2}
 						onClick={(e) =>
 							setFormData({
@@ -197,6 +200,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="rating-3"
+						aria-label="rate 3 out of 5"
 						value={3}
 						onClick={(e) =>
 							setFormData({
@@ -212,6 +216,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="rating-4"
+						aria-label="rate 4 out of 5"
 						value={4}
 						onClick={(e) =>
 							setFormData({
@@ -227,6 +232,7 @@ const Form: React.FC<Props> = ({
 						type="radio"
 						name="rating"
 						id="rating-5"
+						aria-label="rate 5 out of 5"
 						value={5}
 						onClick={(e) =>
 							setFormData({
@@ -238,14 +244,20 @@ const Form: React.FC<Props> = ({
 				</div>
 			</div>
 			<div className="form__file-input">
-				<input type="file" onChange={getFilmImage} ref={fileRef} />
+				<input
+					aria-label="choose movie picture"
+					type="file"
+					onChange={getFilmImage}
+					ref={fileRef}
+				/>
 			</div>
 			<div className="form__buttons">
-				<button type="submit">
+				<button aria-label="submit" type="submit">
 					<AiOutlineCheck />
 				</button>
 				<button
 					type="button"
+					aria-label="clear form data"
 					onClick={() => {
 						clearData();
 						setCurrentId("");

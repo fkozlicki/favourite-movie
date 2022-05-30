@@ -2,13 +2,14 @@ import { useRef } from "react";
 import { AiOutlineCheck, AiOutlineClear } from "react-icons/ai";
 import { FilmType } from "../App";
 import { postMovie, editMovie } from "../api";
+import { createMovie } from "../actions/movies";
+import { useAppDispatch } from "../store";
 
 type Props = {
 	formData: FilmType;
 	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
 	currentId: string;
 	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
-	getMovies: () => Promise<void>;
 	setNotification: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -17,11 +18,11 @@ const Form: React.FC<Props> = ({
 	setFormData,
 	currentId,
 	setCurrentId,
-	getMovies,
 	setNotification,
 }) => {
 	const disabledInput = useRef<HTMLInputElement>(null);
 	const fileRef = useRef<HTMLInputElement>(null);
+	const dispatch = useAppDispatch();
 
 	const getBase64 = (file: Blob): Promise<string> => {
 		return new Promise((resolve, reject) => {
@@ -77,26 +78,30 @@ const Form: React.FC<Props> = ({
 			return;
 		}
 
+		// if (currentId) {
+		// 	try {
+		// 		await editMovie(currentId, formData);
+		// 		setNotification("Movie edited successfuly");
+		// 	} catch (error) {
+		// 		setNotification("Error occurred when editing movie");
+		// 	}
+		// 	setTimeout(() => setNotification(""), 4000);
+		// 	setCurrentId("");
+		// } else {
+		// 	try {
+		// 		await postMovie(formData);
+		// 		setNotification("Movie added successfuly");
+		// 	} catch (error) {
+		// 		setNotification("Error occurred when adding movie");
+		// 	}
+		// 	setTimeout(() => setNotification(""), 4000);
+		// }
 		if (currentId) {
-			try {
-				await editMovie(currentId, formData);
-				setNotification("Movie edited successfuly");
-			} catch (error) {
-				setNotification("Error occurred when editing movie");
-			}
-			setTimeout(() => setNotification(""), 4000);
-			setCurrentId("");
+			console.log(12);
 		} else {
-			try {
-				await postMovie(formData);
-				setNotification("Movie added successfuly");
-			} catch (error) {
-				setNotification("Error occurred when adding movie");
-			}
-			setTimeout(() => setNotification(""), 4000);
+			dispatch(createMovie(formData));
 		}
-		// refetching data
-		getMovies();
+
 		// clearing form data
 		clearData();
 		// clearing rating (stars)

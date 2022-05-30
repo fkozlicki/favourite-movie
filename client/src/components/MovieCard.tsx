@@ -1,5 +1,4 @@
 import { FilmType } from "../App";
-import { deleteMovie } from "../api";
 import {
 	AiOutlineLike,
 	AiOutlineEdit,
@@ -8,9 +7,10 @@ import {
 	AiOutlineSolution,
 } from "react-icons/ai";
 import { IoIosToday } from "react-icons/io";
+import { useAppDispatch } from "../store";
+import { deleteMovie } from "../actions/movies";
 
 type Props = {
-	getMovies: () => Promise<void>;
 	movieData: FilmType;
 	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
 	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
@@ -22,17 +22,12 @@ const MovieCard: React.FC<Props> = ({
 	setCurrentId,
 	setFormData,
 	setNotification,
-	getMovies,
 }) => {
-	const handleRemoveMovie = async (id: string) => {
-		try {
-			await deleteMovie(id);
-			setNotification("Movie removed successfully");
-		} catch (error) {
-			setNotification("Error occured when removing movie");
-		}
+	const dispatch = useAppDispatch();
+
+	const handleRemoveMovie = (id: string) => {
+		dispatch(deleteMovie(id));
 		setTimeout(() => setNotification(""), 4000);
-		getMovies();
 	};
 
 	return (

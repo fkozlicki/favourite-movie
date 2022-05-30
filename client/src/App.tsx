@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Form, MovieCard } from "./components";
 import { fetchMovies } from "./api";
 import { AiOutlineReload } from "react-icons/ai";
+import { fetchData } from "./actions/movies";
+import { useAppDispatch, useAppSelector } from "./store";
 import "./styles/main.css";
 
 export type FilmType = {
@@ -15,7 +17,6 @@ export type FilmType = {
 };
 
 function App() {
-	const [movies, setMovies] = useState<FilmType[]>([]);
 	const [currentId, setCurrentId] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
@@ -30,23 +31,27 @@ function App() {
 		image: "",
 	});
 
-	const getMovies = async () => {
-		try {
-			setError(false);
-			setLoading(true);
+	const dispatch = useAppDispatch();
+	const movies = useAppSelector((state) => state.movies.moviesList);
+	console.log(movies);
 
-			const data = await fetchMovies();
+	// const getMovies = async () => {
+	// 	try {
+	// 		setError(false);
+	// 		setLoading(true);
 
-			setMovies(data);
-			setLoading(false);
-		} catch (error) {
-			setLoading(false);
-			setError(true);
-		}
-	};
+	// 		const data = await fetchMovies();
+
+	// 		setMovies(data);
+	// 		setLoading(false);
+	// 	} catch (error) {
+	// 		setLoading(false);
+	// 		setError(true);
+	// 	}
+	// };
 
 	useEffect(() => {
-		getMovies();
+		dispatch(fetchData());
 	}, []);
 
 	return (
@@ -56,7 +61,6 @@ function App() {
 			<div className="app__container">
 				<Form
 					setNotification={setNotification}
-					getMovies={getMovies}
 					formData={formData}
 					setFormData={setFormData}
 					currentId={currentId}
@@ -66,7 +70,6 @@ function App() {
 					movies.map((movie) => (
 						<MovieCard
 							setNotification={setNotification}
-							getMovies={getMovies}
 							movieData={movie}
 							setCurrentId={setCurrentId}
 							setFormData={setFormData}

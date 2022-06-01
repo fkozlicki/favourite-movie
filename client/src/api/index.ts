@@ -9,11 +9,13 @@ export const fetchMovies = async () => {
 };
 
 export const postMovie = async (movie: FilmType) => {
-	return await fetch(url, {
+	const res = await fetch(url, {
 		method: "POST",
 		body: JSON.stringify(movie),
 		headers: { "Content-Type": "application/json" },
 	});
+	const postedMovie = await res.json();
+	return postedMovie;
 };
 
 export const deleteMovie = async (id: string) => {

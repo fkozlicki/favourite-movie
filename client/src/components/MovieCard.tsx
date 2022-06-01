@@ -10,7 +10,8 @@ import {
 import { IoIosToday } from "react-icons/io";
 
 type Props = {
-	getMovies: () => Promise<void>;
+	movies: FilmType[];
+	setMovies: React.Dispatch<React.SetStateAction<FilmType[]>>;
 	movieData: FilmType;
 	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
 	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
@@ -22,17 +23,18 @@ const MovieCard: React.FC<Props> = ({
 	setCurrentId,
 	setFormData,
 	setNotification,
-	getMovies,
+	movies,
+	setMovies,
 }) => {
 	const handleRemoveMovie = async (id: string) => {
 		try {
+			setMovies(movies.filter((movie) => movie._id !== id));
 			await deleteMovie(id);
 			setNotification("Movie removed successfully");
 		} catch (error) {
 			setNotification("Error occured when removing movie");
 		}
 		setTimeout(() => setNotification(""), 4000);
-		getMovies();
 	};
 
 	return (

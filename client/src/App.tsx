@@ -55,8 +55,9 @@ function App() {
 			<h1 className="app__title">Your Favourite Movies</h1>
 			<div className="app__container">
 				<Form
+					movies={movies}
+					setMovies={setMovies}
 					setNotification={setNotification}
-					getMovies={getMovies}
 					formData={formData}
 					setFormData={setFormData}
 					currentId={currentId}
@@ -65,8 +66,9 @@ function App() {
 				{movies &&
 					movies.map((movie) => (
 						<MovieCard
+							movies={movies}
+							setMovies={setMovies}
 							setNotification={setNotification}
-							getMovies={getMovies}
 							movieData={movie}
 							setCurrentId={setCurrentId}
 							setFormData={setFormData}

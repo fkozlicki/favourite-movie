@@ -6,9 +6,11 @@ import { postMovie, editMovie } from "../api";
 type Props = {
 	formData: FilmType;
 	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
+	movies: FilmType[];
+	setMovies: React.Dispatch<React.SetStateAction<FilmType[]>>;
 	currentId: string;
 	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
-	getMovies: () => Promise<void>;
+
 	setNotification: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -17,8 +19,9 @@ const Form: React.FC<Props> = ({
 	setFormData,
 	currentId,
 	setCurrentId,
-	getMovies,
 	setNotification,
+	setMovies,
+	movies,
 }) => {
 	const disabledInput = useRef<HTMLInputElement>(null);
 	const fileRef = useRef<HTMLInputElement>(null);
@@ -79,28 +82,29 @@ const Form: React.FC<Props> = ({
 
 		if (currentId) {
 			try {
+				setMovies(
+					movies.map((movie) => (movie._id === currentId ? formData : movie))
+				);
+				// dont need res data here, we have movie id from movie component
 				await editMovie(currentId, formData);
 				setNotification("Movie edited successfuly");
 			} catch (error) {
 				setNotification("Error occurred when editing movie");
 			}
-			setTimeout(() => setNotification(""), 4000);
 			setCurrentId("");
 		} else {
 			try {
-				await postMovie(formData);
+				const postedMovie = await postMovie(formData);
+				setMovies([...movies, postedMovie]);
 				setNotification("Movie added successfuly");
 			} catch (error) {
 				setNotification("Error occurred when adding movie");
 			}
-			setTimeout(() => setNotification(""), 4000);
 		}
-		// refetching data
-		getMovies();
+		setTimeout(() => setNotification(""), 4000);
+
 		// clearing form data
 		clearData();
-		// clearing rating (stars)
-		disabledInput.current!.checked = true;
 	};
 
 	return (

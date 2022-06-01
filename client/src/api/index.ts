@@ -1,4 +1,4 @@
-import { FilmType } from "../App";
+import { IMovie } from "../reducers/moviesSlice";
 
 const url: string = import.meta.env.VITE_MOVIES_ENDPOINT;
 
@@ -8,7 +8,7 @@ export const fetchMovies = async () => {
 	return data;
 };
 
-export const postMovie = async (movie: FilmType) => {
+export const postMovie = async (movie: IMovie) => {
 	return await fetch(url, {
 		method: "POST",
 		body: JSON.stringify(movie),
@@ -22,7 +22,7 @@ export const deleteMovie = async (id: string) => {
 	});
 };
 
-export const editMovie = async (id: string, movie: FilmType) => {
+export const editMovie = async (id: string, movie: IMovie) => {
 	return await fetch(`${url}/${id}`, {
 		method: "PATCH",
 		body: JSON.stringify(movie),

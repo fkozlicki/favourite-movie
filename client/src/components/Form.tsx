@@ -1,27 +1,24 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClear } from "react-icons/ai";
-import { FilmType } from "../App";
-import { postMovie, editMovie } from "../api";
-import { createMovie } from "../actions/movies";
-import { useAppDispatch } from "../store";
+import { createMovie, editMovie } from "../actions/movies";
+import { useAppDispatch, useAppSelector } from "../store";
+import { InputBox, RatingContainer, Rating } from ".";
+import { setCurrentMovieId } from "../reducers/moviesSlice";
 
-type Props = {
-	formData: FilmType;
-	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
-	currentId: string;
-	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
-	setNotification: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const Form: React.FC<Props> = ({
-	formData,
-	setFormData,
-	currentId,
-	setCurrentId,
-	setNotification,
-}) => {
+const Form = () => {
+	const [title, setTitle] = useState<string>("");
+	const [director, setDirector] = useState<string>("");
+	const [year, setYear] = useState<string>("");
+	const [category, setCategory] = useState<string>("");
+	const [image, setImage] = useState<string>("");
+	const [rate, setRate] = useState(0);
+	// reference of disabled input for RatingContainer
 	const disabledInput = useRef<HTMLInputElement>(null);
+	// reference of file input
 	const fileRef = useRef<HTMLInputElement>(null);
+	// id of selected movie for editing
+	const currentMovieId = useAppSelector((state) => state.movies.currentMovieId);
+
 	const dispatch = useAppDispatch();
 
 	const getBase64 = (file: Blob): Promise<string> => {
@@ -41,213 +38,99 @@ const Form: React.FC<Props> = ({
 
 	const getFilmImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files?.length) {
-			setFormData({ ...formData, image: "" });
+			setImage("");
 		} else {
 			const file: Blob = e.target.files[0];
 
 			try {
 				const baseURL = await getBase64(file);
-				setFormData({ ...formData, image: baseURL });
+				setImage(baseURL);
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		}
 	};
 
 	const clearData = () => {
-		setFormData({
-			title: "",
-			director: "",
-			year: "",
-			category: "",
-			rate: 0,
-			image: "",
-		});
+		// clearing states
+		setTitle("");
+		setDirector("");
+		setYear("");
+		setCategory("");
+		setImage("");
+		setRate(0);
+		// clearing file input
 		fileRef.current!.value = "";
+		// clearing rating
 		disabledInput.current!.checked = true;
+		// turning off editting mode
+		dispatch(setCurrentMovieId(""));
 	};
 
 	const handleMovieSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const { title, director, year, rate, category } = formData;
-
 		if (!title || !category || !director || !rate || !year) {
-			setNotification("All fields are required");
-			setTimeout(() => setNotification(""), 4000);
 			return;
 		}
 
-		// if (currentId) {
-		// 	try {
-		// 		await editMovie(currentId, formData);
-		// 		setNotification("Movie edited successfuly");
-		// 	} catch (error) {
-		// 		setNotification("Error occurred when editing movie");
-		// 	}
-		// 	setTimeout(() => setNotification(""), 4000);
-		// 	setCurrentId("");
-		// } else {
-		// 	try {
-		// 		await postMovie(formData);
-		// 		setNotification("Movie added successfuly");
-		// 	} catch (error) {
-		// 		setNotification("Error occurred when adding movie");
-		// 	}
-		// 	setTimeout(() => setNotification(""), 4000);
-		// }
-		if (currentId) {
-			console.log(12);
+		const formData = {
+			title,
+			category,
+			director,
+			rate,
+			year,
+			image,
+		};
+
+		// if editing mode on
+		if (currentMovieId) {
+			dispatch(editMovie(currentMovieId, formData));
 		} else {
 			dispatch(createMovie(formData));
 		}
 
 		// clearing form data
 		clearData();
-		// clearing rating (stars)
-		disabledInput.current!.checked = true;
 	};
 
 	return (
 		<form className="form" onSubmit={handleMovieSubmit}>
-			<h2 className="form__title">{currentId ? "Edit" : "Add"} Movie</h2>
-			<div className="form__input-box">
-				<label htmlFor="title">Title</label>
-				<input
-					type="text"
-					id="title"
-					value={formData.title}
-					onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-				/>
-			</div>
+			<h2 className="form__title">{currentMovieId ? "Edit" : "Add"} Movie</h2>
+			<InputBox
+				title="Title"
+				type="text"
+				inputValue={title}
+				onChange={setTitle}
+			/>
+			<InputBox
+				title="Directed By"
+				type="text"
+				inputValue={director}
+				onChange={setDirector}
+			/>
+			<InputBox
+				title="Category"
+				type="text"
+				inputValue={category}
+				onChange={setCategory}
+			/>
+			<InputBox
+				title="Year"
+				type="number"
+				inputValue={year}
+				onChange={setYear}
+			/>
+			<RatingContainer disabledInputRef={disabledInput}>
+				<>
+					<Rating name="rating-1" value={1} onClick={setRate} />
+					<Rating name="rating-2" value={2} onClick={setRate} />
+					<Rating name="rating-3" value={3} onClick={setRate} />
+					<Rating name="rating-4" value={4} onClick={setRate} />
+					<Rating name="rating-5" value={5} onClick={setRate} />
+				</>
+			</RatingContainer>
 
-			<div className="form__input-box">
-				<label htmlFor="director">Direction</label>
-				<input
-					type="text"
-					id="director"
-					value={formData.director}
-					onChange={(e) =>
-						setFormData({ ...formData, director: e.target.value })
-					}
-				/>
-			</div>
-			<div className="form__input-box">
-				<label htmlFor="category">Category</label>
-				<input
-					type="text"
-					id="category"
-					value={formData.category}
-					onChange={(e) =>
-						setFormData({ ...formData, category: e.target.value })
-					}
-				/>
-			</div>
-			<div className="form__input-box">
-				<label htmlFor="year">year</label>
-				<input
-					type="number"
-					id="year"
-					min={1895}
-					max={new Date().getFullYear()}
-					value={formData.year}
-					onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-				/>
-			</div>
-			<div className="form__input-box form__rating-box">
-				<label>Rate</label>
-				<div className="form__rating">
-					<input
-						type="radio"
-						name="rating"
-						id="clear-rating"
-						aria-label="clear your rate"
-						ref={disabledInput}
-						defaultChecked
-						disabled
-					/>
-					<label htmlFor="rating-1">
-						<div className="star"></div>
-					</label>
-					<input
-						type="radio"
-						name="rating"
-						id="rating-1"
-						aria-label="rate 1 out of 5"
-						value={1}
-						onClick={(e) =>
-							setFormData({
-								...formData,
-								rate: parseInt((e.target as HTMLInputElement).value),
-							})
-						}
-					/>
-					<label htmlFor="rating-2">
-						<div className="star"></div>
-					</label>
-					<input
-						type="radio"
-						name="rating"
-						id="rating-2"
-						aria-label="rate 2 out of 5"
-						value={2}
-						onClick={(e) =>
-							setFormData({
-								...formData,
-								rate: parseInt((e.target as HTMLInputElement).value),
-							})
-						}
-					/>
-					<label htmlFor="rating-3">
-						<div className="star"></div>
-					</label>
-					<input
-						type="radio"
-						name="rating"
-						id="rating-3"
-						aria-label="rate 3 out of 5"
-						value={3}
-						onClick={(e) =>
-							setFormData({
-								...formData,
-								rate: parseInt((e.target as HTMLInputElement).value),
-							})
-						}
-					/>
-					<label htmlFor="rating-4">
-						<div className="star"></div>
-					</label>
-					<input
-						type="radio"
-						name="rating"
-						id="rating-4"
-						aria-label="rate 4 out of 5"
-						value={4}
-						onClick={(e) =>
-							setFormData({
-								...formData,
-								rate: parseInt((e.target as HTMLInputElement).value),
-							})
-						}
-					/>
-					<label htmlFor="rating-5">
-						<div className="star"></div>
-					</label>
-					<input
-						type="radio"
-						name="rating"
-						id="rating-5"
-						aria-label="rate 5 out of 5"
-						value={5}
-						onClick={(e) =>
-							setFormData({
-								...formData,
-								rate: parseInt((e.target as HTMLInputElement).value),
-							})
-						}
-					/>
-				</div>
-			</div>
 			<div className="form__file-input">
 				<input
 					aria-label="choose movie picture"
@@ -256,6 +139,7 @@ const Form: React.FC<Props> = ({
 					ref={fileRef}
 				/>
 			</div>
+
 			<div className="form__buttons">
 				<button aria-label="submit" type="submit">
 					<AiOutlineCheck />
@@ -265,7 +149,6 @@ const Form: React.FC<Props> = ({
 					aria-label="clear form data"
 					onClick={() => {
 						clearData();
-						setCurrentId("");
 					}}
 				>
 					<AiOutlineClear />

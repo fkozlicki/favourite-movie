@@ -25,7 +25,23 @@ body {
 img {
 	max-width: 100%;
 	height: auto;
+	position: relative;
+	z-index: 10;
 }
+img:before {
+	content: "No image";
+	width: 100%;
+	height: 100%;
+	background: gray;
+	z-index: 100;
+	position: absolute;
+	left: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 input,
 label {
 	width: 100%;
@@ -71,8 +87,17 @@ button:hover {
 /* APP CONTAINER */
 .app__container {
 	display: flex;
+	align-items: flex-start;
 	gap: 2rem;
+	flex-direction: column;
+	align-items: center;
+}
+/* MOVIES CONTAINER */
+.movies-container {
+	display: flex;
 	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 20px;
 	justify-content: center;
 }
 /* MOVIE CARD */
@@ -136,6 +161,7 @@ button:hover {
 	gap: 16px;
 
 	width: 100%;
+	min-width: 250px;
 	max-width: 22rem;
 	background: #ffffff30;
 	padding: 1rem 1rem 2rem;

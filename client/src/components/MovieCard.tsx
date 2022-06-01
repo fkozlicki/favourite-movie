@@ -1,4 +1,4 @@
-import { FilmType } from "../App";
+import { IMovie } from "../reducers/moviesSlice";
 import {
 	AiOutlineLike,
 	AiOutlineEdit,
@@ -9,25 +9,20 @@ import {
 import { IoIosToday } from "react-icons/io";
 import { useAppDispatch } from "../store";
 import { deleteMovie } from "../actions/movies";
+import { setCurrentMovieId } from "../reducers/moviesSlice";
 
-type Props = {
-	movieData: FilmType;
-	setFormData: React.Dispatch<React.SetStateAction<FilmType>>;
-	setCurrentId: React.Dispatch<React.SetStateAction<string>>;
-	setNotification: React.Dispatch<React.SetStateAction<string>>;
+type MovieCardProps = {
+	movieData: IMovie;
 };
 
-const MovieCard: React.FC<Props> = ({
-	movieData,
-	setCurrentId,
-	setFormData,
-	setNotification,
-}) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movieData }) => {
 	const dispatch = useAppDispatch();
 
-	const handleRemoveMovie = (id: string) => {
-		dispatch(deleteMovie(id));
-		setTimeout(() => setNotification(""), 4000);
+	const handleEditMovie = () => {
+		// set form data
+
+		// set editing mode on
+		dispatch(setCurrentMovieId(movieData._id));
 	};
 
 	return (
@@ -42,7 +37,6 @@ const MovieCard: React.FC<Props> = ({
 						<AiOutlineSolution />
 						{movieData.director}
 					</p>
-
 					<p>
 						<IoIosToday />
 						{movieData.year}
@@ -59,17 +53,13 @@ const MovieCard: React.FC<Props> = ({
 				<div className="movie-card__buttons">
 					<button
 						aria-label="delete movie"
-						onClick={() => handleRemoveMovie(movieData._id as string)}
+						onClick={() => {
+							if (movieData._id) dispatch(deleteMovie(movieData._id));
+						}}
 					>
 						<AiOutlineDelete />
 					</button>
-					<button
-						aria-label="edit this movie"
-						onClick={() => {
-							setCurrentId(movieData._id as string);
-							setFormData(movieData);
-						}}
-					>
+					<button aria-label="edit this movie" onClick={() => handleEditMovie}>
 						<AiOutlineEdit />
 					</button>
 				</div>

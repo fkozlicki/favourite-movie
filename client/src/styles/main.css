@@ -70,6 +70,7 @@ button:hover {
 
 /* APP CONTAINER */
 .app__container {
+	align-items: flex-start;
 	display: flex;
 	gap: 2rem;
 	flex-wrap: wrap;

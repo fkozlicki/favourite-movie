@@ -1,0 +1,36 @@
+/* FORM */
+
+.form {
+	display: grid;
+	gap: 16px;
+
+	width: 100%;
+	max-width: 22rem;
+	background: #ffffff30;
+	padding: 1rem 1rem 2rem;
+	border-radius: 1rem;
+}
+
+.form__title {
+	text-align: center;
+	color: white;
+}
+.form__error {
+	text-align: center;
+	font-weight: bolder;
+	color: rgb(214, 218, 26);
+}
+.form__buttons {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+.form__buttons button {
+	width: 56px;
+	height: 56px;
+	border-radius: 9999px;
+	background: #5c627e;
+}
+.form__buttons button:first-child {
+	background: #5865f2;
+}

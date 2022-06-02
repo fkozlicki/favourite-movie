@@ -1,0 +1,18 @@
+.form__input-box {
+	width: 100%;
+	display: grid;
+	background: #00000060;
+	border-radius: 1rem;
+	padding: 5px 1rem;
+	color: white;
+}
+.form__input-box input {
+	padding: 3px 0;
+	font-size: 16px;
+	color: white;
+}
+.form__input-box label {
+	font-size: 12px;
+	text-transform: uppercase;
+	font-weight: 700;
+}

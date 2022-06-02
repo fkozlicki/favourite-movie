@@ -1,0 +1,14 @@
+.app__error {
+	padding: 0.5rem 1rem;
+	border: 1px solid #293156;
+	color: white;
+	text-align: center;
+}
+
+.app__error button {
+	margin-top: 1rem;
+	width: 46px;
+	height: 46px;
+	border-radius: 9999px;
+	background: #5c627e;
+}

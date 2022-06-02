@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600;700&display=swap");
+
+/* GLOBALS */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+html {
+	scroll-behavior: smooth;
+}
+body {
+	font-family: "Red Hat Display", sans-serif;
+	background: linear-gradient(
+		45deg,
+		#5294d7,
+		rgba(82, 100, 217, 0.849),
+		rgba(48, 51, 58, 0.945)
+	);
+	background-repeat: no-repeat;
+	background-size: cover;
+	min-height: 100vh;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+input,
+label {
+	width: 100%;
+}
+input,
+button {
+	border: none;
+	outline: none;
+	background: none;
+}
+
+button {
+	cursor: pointer;
+	font-size: 1.3rem;
+	color: white;
+	transition: transform 0.3s ease-in-out;
+}
+button:hover {
+	transform: scale(1.1);
+}
+
+.app {
+	padding: 2rem 1rem;
+	margin: auto;
+}
+
+.app__notification {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 8px;
+	color: white;
+	background: #00000070;
+	border-bottom-right-radius: 10px;
+}
+
+.app__title {
+	text-align: center;
+	color: White;
+	margin-bottom: 2rem;
+}
+
+/* APP CONTAINER */
+.app__container {
+	align-items: flex-start;
+	display: flex;
+	gap: 2rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 773px) {
+	.container {
+		justify-content: start;
+	}
+}

@@ -9,27 +9,39 @@ export const fetchMovies = async () => {
 };
 
 export const postMovie = async (movie: FilmType) => {
-	const res = await fetch(url, {
-		method: "POST",
-		body: JSON.stringify(movie),
-		headers: { "Content-Type": "application/json" },
-	});
-	const postedMovie = await res.json();
-	return postedMovie;
+	try {
+		const res = await fetch(url, {
+			method: "POST",
+			body: JSON.stringify(movie),
+			headers: { "Content-Type": "application/json" },
+		});
+		const postedMovie = await res.json();
+		return postedMovie;
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 export const deleteMovie = async (id: string) => {
-	return await fetch(`${url}/${id}`, {
-		method: "DELETE",
-	});
+	try {
+		return await fetch(`${url}/${id}`, {
+			method: "DELETE",
+		});
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 export const editMovie = async (id: string, movie: FilmType) => {
-	return await fetch(`${url}/${id}`, {
-		method: "PATCH",
-		body: JSON.stringify(movie),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
+	try {
+		return await fetch(`${url}/${id}`, {
+			method: "PATCH",
+			body: JSON.stringify(movie),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+	} catch (error) {
+		console.error(error);
+	}
 };

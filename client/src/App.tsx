@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { Form, MovieCard } from "./components";
+import React, { useState, useEffect } from "react";
+import { Form, MovieCard, Loading, Error } from "./components";
 import { fetchMovies } from "./api";
-import { AiOutlineReload } from "react-icons/ai";
-import "./styles/main.css";
+
+import "./App.css";
 
 export type FilmType = {
 	_id?: string;
@@ -18,8 +18,7 @@ function App() {
 	const [movies, setMovies] = useState<FilmType[]>([]);
 	const [currentId, setCurrentId] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<boolean>(false);
-	const [notification, setNotification] = useState<string>("");
+	const [error, setError] = useState<string>("");
 
 	const [formData, setFormData] = useState<FilmType>({
 		title: "",
@@ -32,16 +31,15 @@ function App() {
 
 	const getMovies = async () => {
 		try {
-			setError(false);
+			setError("");
 			setLoading(true);
-
 			const data = await fetchMovies();
-
 			setMovies(data);
+		} catch (error: any) {
+			console.error(error);
+			setError("Failed while fetching movies.");
+		} finally {
 			setLoading(false);
-		} catch (error) {
-			setLoading(false);
-			setError(true);
 		}
 	};
 
@@ -51,13 +49,11 @@ function App() {
 
 	return (
 		<div className="app">
-			{notification && <div className="app__notification">{notification}</div>}
 			<h1 className="app__title">Your Favourite Movies</h1>
 			<div className="app__container">
 				<Form
 					movies={movies}
 					setMovies={setMovies}
-					setNotification={setNotification}
 					formData={formData}
 					setFormData={setFormData}
 					currentId={currentId}
@@ -68,7 +64,6 @@ function App() {
 						<MovieCard
 							movies={movies}
 							setMovies={setMovies}
-							setNotification={setNotification}
 							movieData={movie}
 							setCurrentId={setCurrentId}
 							setFormData={setFormData}
@@ -76,24 +71,8 @@ function App() {
 						/>
 					))}
 
-				{loading && (
-					<div className="app__loading">
-						<div></div>
-						<div></div>
-					</div>
-				)}
-				{error && (
-					<div className="app__error">
-						<p>Failed to fetch data.</p>
-						<p>Try to reload the page.</p>
-						<button
-							aria-label="reload page"
-							onClick={() => window.location.reload()}
-						>
-							<AiOutlineReload />
-						</button>
-					</div>
-				)}
+				{loading && <Loading />}
+				{error && <Error message={error} />}
 			</div>
 		</div>
 	);
